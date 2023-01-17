@@ -12,92 +12,150 @@ import java.util.ArrayList;
  */
 public class Hotel {
     
-    String descripcion;
-    String nombre;
-    String direccion;
-    String email;
-    String telefono;
+    private String descripcion;
+    private String nombre;
+    private String direccion;
+    private String email;
+    private String telefono;
     
-    ArrayList<Cliente> clientes;
+    private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+ 
+    public Hotel(String nDescripcion, String nNombre, String nDireccion, String nEmail, String nTelefono){
     
-    boolean inexistente = true;
-
-    
-    public Hotel(){
-    
-        clientes = new ArrayList<Cliente>();
-        descripcion = "ELAE HOTEL es una gran cadena de hoteles repartidos por España y Guatemala. "
-                + "Reconocidos por sus módicos precios, con respecto a la calidad de las instalaciones y la tan amable atención al cliente.";
-        nombre = "ELAE HOTEL";
-        direccion = "C/Hola, 5";
-        email = "elaehotelhola@g.elae.es";
-        telefono = "922 693 103";
+        descripcion = nDescripcion;
+        nombre = nNombre;
+        direccion = nDireccion;
+        email = nEmail;
+        telefono = nTelefono;
         
     }
-    public void datosHotel(){
-        System.out.println(nombre);
-        System.out.println(direccion);
-        System.out.println(email);
-        System.out.println(telefono);
-        System.out.println("");
-        System.out.println(descripcion);
-    }
-    public void addCliente(Cliente cliente){
-        clientes.add(cliente);
-        System.out.println("Cliente registrado.");
+
+    public boolean addCliente(String dni, String nombre, String apellidos, String direccion, String email, String telefono, String fechaNacimiento, Byte edad){
+        //Busco si ya existe un cliente con el DNI introducido.
+        boolean found = false;
+        for(int i = 0; i < clientes.size(); i++){
+            Cliente cliente = clientes.get(i); //Selecciono el cliente número i
+            //Si el DNI introducido es igual al DNI del cliente seleccionado, devuelve true (o sea, existe un cliente con ese DNI).
+            if(cliente.getDni().equals(dni)){
+                found = true;
+            }
+        }
+        if(found){
+            return false;
+        }else{
+            Cliente cliente = new Cliente(dni, nombre, apellidos, direccion, email, telefono, fechaNacimiento, edad);
+            clientes.add(cliente);
+            return true;
+        }
     }
     
-    public void showLista(){
+    /*public void showLista(){
         for(int i = 0; i < clientes.size(); i++){
             System.out.println("");
             System.out.println("Cliente " + (i+1));
             Cliente cliente = clientes.get(i); //Selecciono el cliente número i
-            cliente.informacion(); //Llamo a la función .informacion de la clase Cliente
+            
+            System.out.println("\n DNI: " + cliente.getDni() + "\n Nombre: " + cliente.getNombre() + "\n Apellidos: " + cliente.getApellidos() + 
+                    "\n Dirección: " + cliente.getDireccion() + "\n e-mail: " + cliente.getEmail() + "\n Teléfono: " + cliente.getTelefono() + 
+                    "\n Fecha de nacimiento: " + cliente.getFechaNacimiento() + "\n Edad: " + cliente.getEdad());
             System.out.println("");
         }
-    }
+    }*/
     
-    public void deleteCliente(String dniIn){
-        String dniCliente;
+    public ArrayList<Cliente> mostrarClientes(){
+        return clientes;
+    }
+
+    public Cliente mostrarClienteDni(String dniIn){
         
         for(int i = 0; i < clientes.size(); i++){
             Cliente cliente = clientes.get(i); //Selecciono el cliente número i
-            dniCliente = cliente.getDni(); //Pido el DNI del cliente seleccionado y la almaceno en una variable
             //Si el DNI introducido es igual al DNI del cliente seleccionado, lo elimina
-            if(dniCliente.equals(dniIn)){
-                clientes.remove(i);
-                System.out.println("Cliente eliminado.");
-                inexistente = false;
+            if(cliente.getDni().equals(dniIn)){
+                return cliente;
             }
         }
-        if(inexistente){
-            System.out.println("No existe ningún cliente asociado al DNI introducido.");
+        return null;
+    }
+
+    public boolean actualizarCliente(String dniIn, String nDni, String nNombre, String nApellidos, String nDireccion, String nEmail, String nTelefono, String nFechaNacimiento, Byte nEdad){
+        for(int i = 0; i < clientes.size(); i++){
+            Cliente cliente = clientes.get(i); //Selecciono el cliente número i
+            if(cliente.getDni().equals(dniIn)){
+                cliente.setDni(nDni);
+                cliente.setNombre(nNombre);
+                cliente.setApellidos(nApellidos);
+                cliente.setDireccion(nDireccion);
+                cliente.setEmail(nEmail);
+                cliente.setTelefono(nTelefono);
+                cliente.setFechaNacimiento(nFechaNacimiento);
+                cliente.setEdad(nEdad);
+                return true;
+            }
         }
-        inexistente = true;
+        return false;
     }
     
-    public void promocion(String dniIn){
-        byte edadCliente;
-        String dniCliente;
+    public boolean deleteCliente(String dniIn){
+
+        for(int i = 0; i < clientes.size(); i++){
+            Cliente cliente = clientes.get(i); //Selecciono el cliente número i
+            //Si el DNI introducido es igual al DNI del cliente seleccionado, lo elimina
+            if(cliente.getDni().equals(dniIn)){
+                clientes.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean comprobarDni(String dniIn){
+        for(int i = 0; i < clientes.size(); i++){
+            Cliente cliente = clientes.get(i); //Selecciono el cliente número i
+            //Si el DNI introducido es igual al DNI del cliente seleccionado, entonces existe un cliente asociado a ese DNI.
+            if(cliente.getDni().equals(dniIn)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public String datosHotel(){
+        return "Nombre: " + nombre + "\nDirección: " + direccion + "\nCorreo electrónico: " + email + "\nTeléfono: " + telefono + "\nDescripción: " + descripcion;
+    }
+
+    public int promocion(String dniIn){
         
         for(int i = 0; i < clientes.size(); i++){
             Cliente cliente = clientes.get(i); //Selecciono el cliente número i
-            edadCliente = cliente.getEdad(); //Pido la edad del cliente seleccionado y la almaceno en una variable
-            dniCliente = cliente.getDni();
             //Si el DNI del cliente número i es el que se ha introducido, entonces, calcula si puede aplicar la promoción o no.
-            if(dniCliente.equals(dniIn)){
-                if(edadCliente >= 18 && edadCliente <= 35){
-                System.out.println("Este cliente tiene opción a promoción");
+            if(cliente.getDni().equals(dniIn)){
+                if(cliente.getEdad() >= 18 && cliente.getEdad() <= 35){
+                    return 1;
                 }else{
-                    System.out.println("Este cliente no puede aplicar la promoción, ya que no cumple los requisitos. ");
+                    return 2;
                 }
-                inexistente = false;
             }
         }
-        //Termina el bucle y el DNI introducido no ha coincidido con ninguno, por tanto, no hay ningún cliente con ese DNI.
-        if(inexistente){
-            System.out.println("No existe ningún cliente asociado al DNI introducido.");
-        }
-        inexistente = true;
+        return 0;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTelefono() {
+        return telefono;
     }
 }

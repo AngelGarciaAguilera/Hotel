@@ -4,6 +4,8 @@
  */
 
 package com.politacnicomalaga.vacaciones;
+import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -17,6 +19,7 @@ public class Vacaciones {
         Scanner sc = new Scanner(System.in);
         boolean menu = true;
         String opcion;
+        String ruta;
         
         //Cliente
         String dniIn;
@@ -32,25 +35,10 @@ public class Vacaciones {
         //Hotel
         Hotel hotel = new Hotel("ELAE HOTEL es una gran cadena de hoteles repartidos por España y Guatemala. Reconocidos por sus módicos precios, con respecto a la calidad de las instalaciones y la tan amable atención al cliente.", 
                 "ELAE HOTEL", "C/Hola, 5", "elaehotelhola@g.elae.es", "922 693 103");
-        
+                
         while(menu){
-            System.out.println("-------------------------------------------------");
-            System.out.println("");
-            System.out.println("OPCIONES:");
-            System.out.println("1. Crear un nuevo cliente.");
-            System.out.println("2. Mostrar lista de todos los clientes.");
-            System.out.println("3. Eliminar un cliente.");
-            System.out.println("4. Actualizar un  cliente.");
-            System.out.println("5. Promoción.");
-            System.out.println("6. Datos del Hotel.");
-            System.out.println("7. Mostrar cliente por DNI.");
-            System.out.println("Otra tecla: SALIR.");
-            System.out.println("");
-            System.out.println("-------------------------------------------------");
-            System.out.println("Escoja la tarea a realizar:");
-            
-            opcion = sc.next();
-            sc.reset();
+            mostrarMenuPrincipal();            
+            opcion = leerStringTeclado(sc);
             
             System.out.println("-------------------------------------------------");
             
@@ -58,36 +46,28 @@ public class Vacaciones {
                 case "1":
                     //pide datos
                     System.out.println("Introduzca DNI:");
-                    dni = sc.next();
-                    sc.reset();
+                    dni = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca Nombre:");
-                    nombre = sc.next();
-                    sc.reset();
+                    nombre = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca Apellidos:");
-                    apellidos = sc.next();
-                    sc.reset();
+                    apellidos = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca Dirección:");
-                    direccion = sc.next();
-                    sc.reset();
+                    direccion = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca eMail:");
-                    email = sc.next();
-                    sc.reset();
+                    email = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca Teléfono:");
-                    telefono = sc.next();
-                    sc.reset();
+                    telefono = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca Fecha de Nacimiento:");
-                    fechaNacimiento = sc.next();
-                    sc.reset();
+                    fechaNacimiento = leerStringTeclado(sc);
                     
                     System.out.println("Introduzca Edad:");
-                    edad = sc.nextByte();
-                    sc.reset();
+                    edad = (byte) leerIntTeclado(sc);
                     
                     //Llamo la función .addCliente() de la clase Hotel.
                     
@@ -100,13 +80,11 @@ public class Vacaciones {
                     break;//LISTO
                     
                 case "2":
-                    if(hotel.mostrarClientes().size() < 1){
+                    if(hotel.mostrarClientes() == null){
                         System.out.println("No hay ningún cliente registrado.");
                     }else{
-                        for(int i = 0; i < hotel.mostrarClientes().size(); i++){
-                            Cliente cliente = hotel.mostrarClientes().get(i); //Selecciono el cliente número i del Array
-                            
-                            System.out.println("[" + cliente.getDni() + ", " + cliente.getNombre() + ", " + cliente.getApellidos() + ", " + cliente.getDireccion() + ", " + cliente.getEmail() + ", " + cliente.getTelefono() + ", " + cliente.getFechaNacimiento() + ", " + cliente.getEdad() + "]");
+                        for (Cliente c : hotel.mostrarClientes()) {
+                            System.out.println(c.toString());
                         }
                     }
 
@@ -114,8 +92,7 @@ public class Vacaciones {
                     
                 case "3":
                     System.out.println("Introduzca el DNI del cliente que desea eliminar:");
-                    dni = sc.next();
-                    sc.reset();
+                    dni = leerStringTeclado(sc);
                     
                     if(hotel.deleteCliente(dni)){
                         System.out.println("Cliente eliminado.");
@@ -127,34 +104,25 @@ public class Vacaciones {
 
                 case "4":
                     System.out.println("Introduzca el DNI del cliente que desea actualizar:");
-                    dniIn = sc.next();
-                    sc.reset();
+                    dniIn = leerStringTeclado(sc);
 
                     if(hotel.comprobarDni(dniIn)){
                         System.out.println("Introduzca el nuevo DNI:");
-                        dni = sc.next();
-                        sc.reset();
+                        dni = leerStringTeclado(sc);
                         System.out.println("Introduzca el nuevo Nombre:");
-                        nombre = sc.next();
-                        sc.reset();
+                        nombre = leerStringTeclado(sc);
                         System.out.println("Introduzca los nuevos Apellidos:");
-                        apellidos = sc.next();
-                        sc.reset();
+                        apellidos = leerStringTeclado(sc);
                         System.out.println("Introduzca la nueva Dirección:");
-                        direccion = sc.next();
-                        sc.reset();
+                        direccion = leerStringTeclado(sc);
                         System.out.println("Introduzca el nuevo e-mail:");
-                        email = sc.next();
-                        sc.reset();
+                        email = leerStringTeclado(sc);
                         System.out.println("Introduzca el nuevo Teléfono:");
-                        telefono = sc.next();
-                        sc.reset();
+                        telefono = leerStringTeclado(sc);
                         System.out.println("Introduzca la nueva Fecha de nacimiento:");
-                        fechaNacimiento = sc.next();
-                        sc.reset();
+                        fechaNacimiento = leerStringTeclado(sc);
                         System.out.println("Introduzca la nueva Edad:");
-                        edad = sc.nextByte();
-                        sc.reset();
+                        edad = (byte) leerIntTeclado(sc);
 
                         hotel.actualizarCliente(dniIn, dni, nombre, apellidos, direccion, email, telefono, fechaNacimiento, edad);
                         System.out.println("Cliente actualizado.");
@@ -169,8 +137,7 @@ public class Vacaciones {
                     System.out.println("Tenemos un 20% de descuento del total si reservas una semana");
                     System.out.println("");
                     System.out.println("Introduzca el DNI del cliente al que quiere aplicar la promoción: ");
-                    dni = sc.next();
-                    sc.reset();
+                    dni = leerStringTeclado(sc);
 
                     if(hotel.promocion(dni) == 1){
                         System.out.println("Este cliente tiene opción a promoción.");
@@ -188,8 +155,7 @@ public class Vacaciones {
                 
                 case "7":
                     System.out.println("Introduzca el DNI del cliente que desea mostrar:");
-                    dni = sc.next();
-                    sc.reset();
+                    dni = leerStringTeclado(sc);
                     
                     Cliente cliente = hotel.mostrarClienteDni(dni);
                     
@@ -202,12 +168,78 @@ public class Vacaciones {
                     }
 
                     break;//LISTO
+                /* 
+                case "8":
+                    System.out.println("Indica la ruta en la que desea guardar el fichero CSV:");
+                    ruta = leerStringTeclado(sc);                                        
                     
+                    if(hotel.hacerCSV(ruta)){
+                        System.out.println("Datos HOTEL añadidos con éxito.");
+                    }else{
+                        System.out.println("IOException");
+                    }
+                    for(int i = 0; i < hotel.mostrarClientes().size(); i++){
+                        Cliente miCliente = hotel.mostrarClientes().get(i);
+                        if(miCliente.hacerCSV(ruta)){
+                            System.out.println("Datos CLIENTE añadidos con éxito.");
+                        }else{
+                            System.out.println("IOException");
+                        }
+                    }
+                    
+                    break;
+                */    
+                case "9":
+                    
+                    break;
                 default:
                     sc.close(); //Cierro la entrada de teclado.
                     menu = false;
                     break;
+                                        
             }
         }
     }
+    
+    private static void mostrarMenuPrincipal() {
+	System.out.println("------------------------------------------------- \n");
+        System.out.println("1. Crear un nuevo cliente.");
+        System.out.println("2. Mostrar lista de todos los clientes.");
+        System.out.println("3. Eliminar un cliente.");
+        System.out.println("4. Actualizar un  cliente.");
+        System.out.println("5. Promoción.");
+        System.out.println("6. Datos del Hotel.");
+        System.out.println("7. Mostrar cliente por DNI.");
+        System.out.println("8. Pasar a fichero CSV.");
+        System.out.println("9. Cargar datos de fichero CSV.");
+        System.out.println("Otra tecla: SALIR.\n");
+        System.out.println("-------------------------------------------------");
+        System.out.println("Escoja la tarea a realizar:");
+		
+    }
+	
+    //Recogemos un número de teclado, si nos dan algo que no es un número, ponemos -1 para repetir entrada
+    private static int leerIntTeclado(Scanner sc) {
+	int iOpcion;
+	try {
+            iOpcion = sc.nextInt();
+            sc.nextLine();
+	} catch (InputMismatchException e) {
+            sc.nextLine();
+            return -1;
+	}
+	return iOpcion;
+    }
+	
+    //Recoger un string de teclado
+    private static String leerStringTeclado(Scanner sc) {		
+        String sEntrada;
+	try {
+            sEntrada = sc.nextLine();
+	}catch (InputMismatchException e) {
+            return "";
+	}
+        return sEntrada;
+    }
+    
 }

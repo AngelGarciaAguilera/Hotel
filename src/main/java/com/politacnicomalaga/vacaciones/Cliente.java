@@ -4,6 +4,10 @@
  */
 package com.politacnicomalaga.vacaciones;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  *
  * @author mint
@@ -30,6 +34,25 @@ public class Cliente {
         fechaNacimiento = nFechaNacimiento;
         edad = nEdad;
         
+    }
+    
+    public boolean hacerCSV(String ruta){
+        PrintWriter out = null;
+        try{
+            out = new PrintWriter(new FileWriter(ruta, true));
+            out.println(this.toCSV());            
+        }catch(IOException io){            
+            return false;
+        }finally{
+            if(out != null){
+                out.close();
+            }
+        }
+        return true;
+    }
+    
+    public String toCSV(){
+        return "Cliente;" + dni + ";" + nombre + ";" + apellidos + ";" + direccion + ";" + email + ";" + telefono + ";" + fechaNacimiento + ";" + edad + ";";
     }
     
     //Para generar los getters automáticamente pulsamos ALT+INSERT 

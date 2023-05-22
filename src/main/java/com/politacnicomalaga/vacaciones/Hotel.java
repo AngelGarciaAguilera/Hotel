@@ -4,6 +4,9 @@
  */
 package com.politacnicomalaga.vacaciones;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -62,8 +65,12 @@ public class Hotel {
         }
     }*/
     
-    public ArrayList<Cliente> mostrarClientes(){
-        return clientes;
+    public Cliente[] mostrarClientes() {
+        if (clientes.isEmpty()) {
+            return null;
+        }
+        Cliente[] listaC = new Cliente[clientes.size()];
+        return clientes.toArray(listaC);
     }
 
     public Cliente mostrarClienteDni(String dniIn){
@@ -137,6 +144,25 @@ public class Hotel {
             }
         }
         return 0;
+    }
+    
+    public boolean hacerCSV(String ruta){
+        PrintWriter out = null;
+        try{
+            out = new PrintWriter(new FileWriter(ruta, true));
+            out.println(this.toCSV());            
+        }catch(IOException io){            
+            return false;
+        }finally{
+            if(out != null){
+                out.close();
+            }
+        }
+        return true;
+    }
+    
+    public String toCSV(){
+        return "Hotel;" + descripcion + ";" + nombre + ";" + direccion + ";" + email + ";" + telefono + ";";
     }
 
     public String getDescripcion() {
